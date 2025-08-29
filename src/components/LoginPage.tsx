@@ -179,15 +179,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onRegister }) => {
             </button>
           </div>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h4 className="font-medium text-gray-900 mb-2">Demo Credentials:</h4>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p><strong>Admin:</strong> admin@trustseal.com / admin</p>
-              <p><strong>User:</strong> user@example.com / password</p>
-              <p className="text-xs text-gray-500 mt-2">Or create an account with any email/password</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

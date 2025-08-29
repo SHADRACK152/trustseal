@@ -5,30 +5,10 @@ import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
 
 export const authService = {
-  async login(email: string, password: string): Promise<User> {
+  async login(email: string, _password: string): Promise<User> {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
-    // Mock admin user
-    if (email === 'admin@trustseal.com' && password === 'admin') {
-      return {
-        id: 'admin-1',
-        name: 'Admin User',
-        email: 'admin@trustseal.com',
-        role: 'admin',
-        createdAt: new Date()
-      };
-    }
-    // Mock regular user
-    if (email === 'user@example.com' && password === 'password') {
-      return {
-        id: 'user-1',
-        name: 'John Doe',
-        email: 'user@example.com',
-        role: 'user',
-        createdAt: new Date()
-      };
-    }
-    // Allow any email/password for demo
+    // Accept any email/password for demo (no hardcoded credentials)
     return {
       id: Date.now().toString(),
       name: email.split('@')[0],
