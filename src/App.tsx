@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Upload, FileText, Users, BarChart3, LogOut, Menu, X, Package, TrendingUp } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, Upload, Users, BarChart3, LogOut, Menu, X, Package, TrendingUp } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import Dashboard from './components/Dashboard';
 import UploadPage from './components/UploadPage';
@@ -7,7 +7,7 @@ import BulkUpload from './components/BulkUpload';
 import ConfidenceTrends from './components/ConfidenceTrends';
 import AdminPanel from './components/AdminPanel';
 import { User, Document } from './types';
-import { mockAuthService, mockAIService } from './services/mockServices';
+import { authService, analysisService } from './services/analysisService';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -34,7 +34,7 @@ function App() {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const user = await mockAuthService.login(email, password);
+  const user = await authService.login(email, password);
       setCurrentUser(user);
       localStorage.setItem('trustseal_user', JSON.stringify(user));
       return { success: true };
@@ -45,7 +45,7 @@ function App() {
 
   const handleRegister = async (name: string, email: string, password: string) => {
     try {
-      const user = await mockAuthService.register(name, email, password);
+  const user = await authService.register(name, email, password);
       setCurrentUser(user);
       localStorage.setItem('trustseal_user', JSON.stringify(user));
       return { success: true };
@@ -60,11 +60,9 @@ function App() {
     setCurrentPage('dashboard');
   };
 
-  const handleFileUpload = async (file: File) => {
-    if (!currentUser) return;
-
-    const analysisResult = await mockAIService.analyzeDocument(file);
-    
+  const handleFileUpload = async (file: File): Promise<Document> => {
+    if (!currentUser) throw new Error('No user logged in');
+    const analysisResult = await analysisService.analyzeDocument(file);
     const newDocument: Document = {
       id: Date.now().toString(),
       userId: currentUser.id,
@@ -81,11 +79,9 @@ function App() {
       analysis: analysisResult.analysis,
       fileSize: file.size
     };
-
     const updatedDocuments = [newDocument, ...documents];
     setDocuments(updatedDocuments);
     localStorage.setItem('trustseal_documents', JSON.stringify(updatedDocuments));
-    
     return newDocument;
   };
 
